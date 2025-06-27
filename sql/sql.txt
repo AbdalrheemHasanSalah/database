@@ -1,0 +1,188 @@
+create table guest(
+gid INT primary key,
+first_name varchar(100),
+last_name varchar(100),
+gender varchar(10),
+address varchar(50),
+gust_phone varchar(20)
+
+);
+
+
+0 row(s) affected	0.034 sec
+
+
+CREATE TABLE room (
+    room_id INT PRIMARY KEY,
+    avaibility BOOLEAN,
+    room_type VARCHAR(50),
+    price DECIMAL(10,2),
+    bed_type VARCHAR(50),
+    cleaning_status VARCHAR(50)
+);
+	
+0 row(s) affected	0.032 sec
+
+
+CREATE TABLE department (
+    department_numper INT PRIMARY KEY,
+    department_name VARCHAR(100),
+    department_floor INT
+);
+0 row(s) affected   0.047 sec
+
+
+
+CREATE TABLE guest_email (
+    email VARCHAR(100) ,
+    gid INT,
+    constraint pk_guest_email  primary key(email,gid),
+    constraint fk_guest_email FOREIGN KEY (gid) REFERENCES guest(gid)
+);
+0 row(s) affected
+0.047 sec
+
+
+CREATE TABLE guest_phone (
+    phone VARCHAR(20),
+    gid INT,
+    CONSTRAINT pk_guest_phone PRIMARY KEY (phone,gid),
+    CONSTRAINT fk_guest_phone FOREIGN KEY (gid) REFERENCES guest(gid)
+);
+0 row(s) affected
+0.047 sec
+
+
+CREATE TABLE employee (
+    eid INT PRIMARY KEY,
+    fname VARCHAR(100),
+    snma VARCHAR(100),
+    lname VARCHAR(100),
+    jop_title VARCHAR(50),
+    barithdate DATE,
+    phone VARCHAR(20),
+    email VARCHAR(100),
+    gender VARCHAR(10),
+    department_numper INT,
+    gid INT,
+    supervisor_id INT,
+    FOREIGN KEY (department_numper) REFERENCES department(department_numper),
+    FOREIGN KEY (id) REFERENCES guest(gid),
+    FOREIGN KEY (supervisor_id) REFERENCES employee(eid)
+);
+0 row(s) affected
+0.047 sec
+
+
+CREATE TABLE work (
+    room_id INT,
+    eid INT,
+	room_service varchar(150),
+    constraint pk_work PRIMARY KEY (room_id, eid),
+    FOREIGN KEY (room_id) REFERENCES room(room_id),
+    FOREIGN KEY (eid) REFERENCES employee(eid)
+);
+0 row(s) affected
+0.047 sec
+
+
+CREATE TABLE reserve(
+gid INT,
+room_id INT,
+constraint pk_reserve primary key(gid,room_id),
+FOREIGN KEY (gid) REFERENCES guest(gid),
+FOREIGN KEY (room_id) REFERENCES room(room_id)
+);
+
+0 row(s) affected
+0.047 sec
+
+
+
+INSERT INTO guest (gid, first_name, last_name, gender, address)
+VALUES (1, 'Ahmad', 'Hassan', 'Male', 'Nablus');
+
+1 row(s) affected Records: 1  Duplicates: 0  Warnings: 0 .031sec
+
+
+INSERT INTO guest (gid, first_name, last_name, gender, address)
+VALUES (2, 'Sara', 'Ahmed', 'Female', 'barqa');
+1 row(s) affected Records: 1  Duplicates: 0  Warnings: 0 .031sec
+
+
+
+INSERT INTO guest_phone (phone, gid)
+VALUES ('0594589671', 1);
+
+1 row(s) affected 0.016 sec
+
+
+INSERT INTO guest_phone (phone, gid)
+VALUES ('056967312', 2);
+
+1 row(s) affected 0.000 sec
+
+
+INSERT INTO room (room_id, avaibility, room_type, price, bed_type, cleaning_status)
+VALUES (101, TRUE, 'Single room', 250.00, 'Single Bed', 'Clean');
+1 row(s) affected 0.016 sec
+
+INSERT INTO room (room_id, avaibility, room_type, price, bed_type, cleaning_status)
+VALUES (102, FALSE, 'Deluxe double room', 800.00, 'Double Bed', 'Dirty');
+1 row(s) affected 0.015 sec
+
+
+INSERT INTO department (department_numper, department_name, department_floor)
+VALUES (1, 'Security', 1);
+1 row(s) affected 0.015 sec
+
+INSERT INTO department (department_numper, department_name, department_floor)
+VALUES (2, 'Reception', 0);
+1 row(s) affected 0.00 sec
+
+
+
+
+INSERT INTO employee (eid, fname, snma, lname, jop_title, barithdate, phone, email,gender, department_numper, gid, supervisor_id)
+VALUES (10, 'Abdalrheem', 'hassan', 'salah', 'Manager', '2003-04-18', '0592789562', 'abdalrheem@gmail.com', 'Male', 2, 1, NULL);
+
+
+1 row(s) affected 0.016 sec
+
+
+INSERT INTO employee (eid, fname, snma, lname, jop_title, barithdate, phone, email,gender, department_numper, gid, supervisor_id)
+VALUES(11, 'Nizar', 'Salem', 'Kassab', 'room_service', '1990-08-20', '0557654321', 'Nizar@hotmail.com', 'Male', 1, 2, 10);
+1 row(s) affected 0.000 sec
+
+
+INSERT INTO work (room_id, eid, room_service)
+VALUES (101, 11,'Breakfast');
+1 row(s) affected 0.016 sec
+
+INSERT INTO work (room_id, eid, room_service)
+VALUES (102, 11,'Online ordering');
+1 row(s) affected 0.000 sec
+
+
+
+INSERT INTO reserve (gid, room_id,date_reserve)
+VALUES (1, 101,NOW());
+1 row(s) affected 0.015 sec
+
+
+INSERT INTO reserve (gid, room_id,date_reserve)
+VALUES(2, 102,NOW());
+
+
+
+1 row(s) affected 0.000
+
+
+INSERT INTO guest_email (email, gid)
+VALUES ('Ahmad.hassan@gmail.com', 1);
+1 row(s) affected 0.015 sec
+
+INSERT INTO guest_email (email, gid)
+VALUES ('sara.ahmed@outlook.com', 2);
+
+1 row(s) affected 0.016 sec
